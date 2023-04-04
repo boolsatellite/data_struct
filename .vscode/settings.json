@@ -1,0 +1,17 @@
+{
+    "files.associations": {
+        "xhash": "cpp",
+        "unordered_set": "cpp",
+        "functional": "cpp",
+        "memory": "cpp",
+        "xlocale": "cpp",
+        "ostream": "cpp",
+        "queue": "cpp",
+        "xstddef": "cpp",
+        "cmath": "cpp",
+        "*.tcc": "cpp",
+        "cstdio": "cpp",
+        "forward_list": "cpp",
+        "type_traits": "cpp"
+    }
+}
