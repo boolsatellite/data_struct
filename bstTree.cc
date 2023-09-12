@@ -8,7 +8,7 @@
 
 #include "functional"
 template<typename T , typename Compare = std::less<T>>
-class BSTree{
+class BSTree {
 public:
     BSTree() :root_(nullptr) { }
 
@@ -22,7 +22,7 @@ public:
             Node* parent = nullptr;
             while (cur != nullptr) {
                 parent = cur;
-                if(!comp_( cur->data_ , val)) {
+                if(comp_( val , cur->data_ )) {
                     cur = cur->left_;
                 } else if(comp_( cur->data_ , val)) {
                     cur = cur->right_;
@@ -34,6 +34,57 @@ public:
                 parent->right_ = new Node(val);
             } else {
                 parent->left_ = new Node(val);
+            }
+        }
+    }
+
+    // 非递归删除
+    /* 1. 没有孩子节点        ->  父节点地址域设为nullptr
+     * 2. 只有一个孩子节点     ->  将孩子写入父节点地址域
+     * 3. 有两个孩子节点       ->  找待删除节点的前驱或者后继节点，用前驱或者后继节点将
+     *                           待删除节点覆盖掉，然后删除前驱或者后继节点,从而转化为 情况 1 ，2
+     */
+    void n_remove(const T& val) {
+        if(root_ == nullptr)
+            return;
+        Node* parent = nullptr;
+        Node* cur = root_;
+        while(cur != nullptr) {
+            parent = cur;
+            if(comp_(val , cur->data_)) {
+                cur = cur->right_;
+            } else if (comp_(cur->data_ , val)) {
+                cur = cur->left_;
+            } else {    //cur->data_ == val  找到待删除节点
+                break;
+            }
+        }
+        if(cur == nullptr) return;          //当待删除节点不存在时
+        if(cur->left_ && cur->right_) {     //情况3
+            parent = cur;
+            Node* pre = cur->left_;
+            while (pre->right_) {           //找前驱节点
+                parent = pre;
+                pre = pre->right_;
+            }
+            cur->data_ = pre->data_;
+            cur = pre;
+        }
+        //情况 1 2
+        Node* child = cur->left_;   //child指向cur有孩子的那一侧
+        if(child == nullptr)
+            child = cur->right_;
+        if(parent == nullptr) {     //删除的节点是根节点
+            root_ = child;
+            delete cur;
+        }
+        else {
+            if (parent->left_ == cur) {
+                parent->left_ = child;
+                delete cur;
+            } else {
+                parent->right_ = child;
+                delete cur;
             }
         }
     }
@@ -54,6 +105,7 @@ private:
 };
 
 int main() {
+
 /*
     int arr[] = {58,24,67,0,34,62,69,5,41,64,78};
     BSTree<int> bsTree;
@@ -61,4 +113,7 @@ int main() {
         bsTree.n_insert(i);
     }
 */
-}
+
+
+
+};
