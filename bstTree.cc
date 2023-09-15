@@ -89,6 +89,20 @@ public:
         }
     }
 
+    //非递归查询
+    bool n_query(const T& val) {
+        Node* cur = root_;
+        while (cur != nullptr) {
+            if(cur->data_ == val) return true;
+            else if (comp_(cur->data_ , val )) {
+                cur = cur->right_;
+            } else {
+                cur = cur->left_;
+            }
+        }
+        return false;
+    }
+
 
 
 private:
