@@ -104,8 +104,48 @@ public:
     }
 
 
+    void preOrder() {                   //递归前序遍历接口
+        std::cout << "[递归] 前序遍历" ;
+        preOrder(root_);
+        std::cout << std::endl;
+    }
+
+    void inOrder() {
+        std:: cout << "[递归] 中序遍历" ;
+        inOrder(root_);
+        std::cout << std::endl;
+    }
+
+    void postOrder() {
+        std::cout <<"[递归] 后序遍历";
+        postOrder(root_);
+        std::cout << std::endl;
+    }
 
 private:
+    struct Node;
+
+    void preOrder(Node* node) {         //前序遍历递归
+        if(node == nullptr) return;
+        std::cout <<node->data_ <<" ";
+        preOrder(node->left_);
+        preOrder(node->right_);
+    }
+
+    void inOrder(Node* node) {
+        if (node == nullptr) return;
+        inOrder(node->left_);
+        std::cout << node->data_ <<" ";
+        inOrder(node->right_);
+    }
+
+    void postOrder(Node* node) {
+        if (node == nullptr) return;
+        postOrder(node->left_);
+        postOrder(node->right_);
+        std::cout << node->data_ <<" ";
+    }
+
     struct Node {       //节点结构体定义
         Node(T data=T{} , Node* left = nullptr , Node* right= nullptr)
             :data_(data) , left_(left) , right_(right) {}
@@ -120,14 +160,14 @@ private:
 
 int main() {
 
-/*
+
     int arr[] = {58,24,67,0,34,62,69,5,41,64,78};
     BSTree<int> bsTree;
     for(int &i : arr) {
         bsTree.n_insert(i);
     }
-*/
-
-
+    bsTree.inOrder();
+    bsTree.preOrder();
+    bsTree.postOrder();
 
 };
