@@ -1,4 +1,5 @@
 #include "iostream"
+#include "stack"
 
 /*
  * BST插入节点：
@@ -119,7 +120,7 @@ public:
 
 
     void preOrder() {                   //递归前序遍历接口
-        std::cout << "[递归] 前序遍历" ;
+        std::cout << "[递归]  前序遍历    " ;
         preOrder(root_);
         std::cout << std::endl;
     }
@@ -155,6 +156,27 @@ public:
     int num() {                 //递归求节点个数接口
         return num(root_);
     }
+
+    void n_preOrder() {         //非递归前序遍历
+        std::cout << "[非递归] 前序遍历"<<"   ";
+        std::stack<Node*> s;
+        if(root_ == nullptr) return;
+        s.push(root_);
+        while(!s.empty()) {
+            Node* top = s.top();
+            s.pop();
+            std::cout <<top->data_<<" ";
+            if(top->right_ != nullptr) {
+                s.push(top->right_);
+            }
+            if(top->left_!= nullptr) {
+                s.push(top->left_);
+            }
+        }
+        std::cout << std::endl;
+    }
+
+
 private:
     struct Node;
 
@@ -284,7 +306,7 @@ int main() {
         bsTree.n_insert(i);
     }
     bsTree.preOrder();
+    bsTree.n_preOrder();
     bsTree.remove(58);
-    bsTree.preOrder();
 
 };
