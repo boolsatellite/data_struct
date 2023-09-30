@@ -157,24 +157,44 @@ public:
         return num(root_);
     }
 
-    void n_preOrder() {         //非递归前序遍历
+    void n_preOrder() {
+        if(root_ == nullptr) return;
         std::cout << "[非递归] 前序遍历"<<"   ";
         std::stack<Node*> s;
-        if(root_ == nullptr) return;
         s.push(root_);
+        while(!s.empty()) {
+            Node *top = s.top();
+            s.pop();
+            std::cout << top->data_ << " ";
+
+            if (top->right_ != nullptr) s.push(top->right_);
+            if (top->left_ != nullptr) s.push(top->left_);
+        }
+        std::cout << std::endl;
+    }
+
+    void n_inOrder() {         //非递归中序遍历
+        if(root_ == nullptr) return;
+        std::cout << "[非递归] 中序遍历"<<"   ";
+        std::stack<Node*> s;
+        Node* cur = root_;
+        while(cur != nullptr) {
+            s.push(cur);
+            cur = cur->left_;
+        }
         while(!s.empty()) {
             Node* top = s.top();
             s.pop();
-            std::cout <<top->data_<<" ";
-            if(top->right_ != nullptr) {
-                s.push(top->right_);
-            }
-            if(top->left_!= nullptr) {
-                s.push(top->left_);
+            std::cout << top->data_ <<" ";
+            cur = top->right_;
+            while(cur != nullptr) {
+                s.push(cur);
+                cur = cur->left_;
             }
         }
         std::cout << std::endl;
     }
+
 
 
 private:
@@ -307,6 +327,6 @@ int main() {
     }
     bsTree.preOrder();
     bsTree.n_preOrder();
-    bsTree.remove(58);
-
+    bsTree.inOrder();
+    bsTree.n_inOrder();
 };
