@@ -1,5 +1,7 @@
 #include "iostream"
 #include "stack"
+#include <assert.h>
+#include "vector"
 
 /*
  * BST插入节点：
@@ -219,11 +221,28 @@ public:
         std::cout << std::endl;
     }
 
+    void findValues(std::vector<T>& vec , int i , int j) {      //查找位于(i,j)之间的元素并存放在vec中 ,递归接口
+        if(root_ == nullptr) assert(0);
+        findValues(root_ , vec , i , j);
+    }
 
 
 private:
     struct Node;
 
+    void findValues(Node* node , std::vector<T>& vec , int i , int j) {      //查找位于(i,j)之间的元素并存放在vec中 递归实现
+        //采用中序遍历为升序的思想
+        if(node == nullptr) return;
+        if(node->data_ > i) {
+            findValues(node->left_, vec, i, j);
+        }
+        if(node->data_ >= i &&  node->data_ <= j) {
+            vec.push_back(node->data_);
+        }
+        if(node->data_ < j) {
+            findValues(node->right_, vec, i, j);
+        }
+    }
     Node* insert(Node* node , const T& val) {   //递归插入
         if(node == nullptr) {
             return new Node(val);
@@ -349,6 +368,11 @@ int main() {
     for(int &i : arr) {
         bsTree.n_insert(i);
     }
-    bsTree.n_postOrder();
-    bsTree.postOrder();
+
+    bsTree.inOrder();
+    std::vector<int> vi;
+    bsTree.findValues(vi,10,60);
+    for (auto &i : vi) {
+        std::cout << i <<" ";
+    }
 };
