@@ -195,6 +195,30 @@ public:
         std::cout << std::endl;
     }
 
+    void n_postOrder() {            //非递归后序遍历
+        if(root_ == nullptr) return;
+        std::cout << "[非递归] 后序遍历" << " ";
+        std::stack<Node*> s1 , s2;      //V R L
+        s1.push(root_);
+        while(!s1.empty()) {
+            Node* cur = s1.top();
+            s1.pop();
+            s2.push(cur);
+            if(cur->left_ != nullptr) {
+                s1.push(cur->left_);
+            }
+            if(cur->right_ != nullptr) {
+                s1.push(cur->right_);
+            }
+        }
+        while (!s2.empty()) {
+            Node* top = s2.top();
+            s2.pop();
+            std:: cout << top->data_ <<" ";
+        }
+        std::cout << std::endl;
+    }
+
 
 
 private:
@@ -325,8 +349,6 @@ int main() {
     for(int &i : arr) {
         bsTree.n_insert(i);
     }
-    bsTree.preOrder();
-    bsTree.n_preOrder();
-    bsTree.inOrder();
-    bsTree.n_inOrder();
+    bsTree.n_postOrder();
+    bsTree.postOrder();
 };
