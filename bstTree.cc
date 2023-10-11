@@ -226,9 +226,26 @@ public:
         findValues(root_ , vec , i , j);
     }
 
+    bool isBSTtrr() {
+        Node* pre = nullptr;
+        return isBSTtrr(root_ , pre);
+    }
 
 private:
     struct Node;
+
+    bool isBSTree(Node* node , Node* &pre) {          //在递归处理中主要判断使递归结束的条件
+        if(node == nullptr) return true;
+        if( isBSTtrr(node->left_ , pre) == false) return false;
+
+        if(pre != nullptr) {
+            if(pre->data_ > node->data_) return false;
+        }
+        pre = node;
+
+        if( isBSTtrr(node->right_ , pre) == false) return false;
+        return true;
+    }
 
     void findValues(Node* node , std::vector<T>& vec , int i , int j) {      //查找位于(i,j)之间的元素并存放在vec中 递归实现
         //采用中序遍历为升序的思想
