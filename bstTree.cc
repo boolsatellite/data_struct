@@ -15,6 +15,7 @@
 
 template<typename T, typename Compare = std::less<T>>
 class BSTree {
+struct Node;
 public:
     BSTree() : root_(nullptr) {}
 
@@ -245,9 +246,21 @@ public:
         }
     }
 
+    Node* getLCA(T a , T b) {                 //最近公共祖先节点
+        Node* cur = root_;
+        while(cur != nullptr) {
+            if(a < cur->data_ && b < cur->data_) {
+                cur = cur->left_;
+            } else if ( a > cur->data_ && b > cur->data_) {
+                cur = cur->right_;
+            } else {
+                return cur;
+            }
+        }
+        return nullptr;
+    }
 
 private:
-    struct Node;
 
     bool isChildTree(Node *cur, Node *child) {          //判断子树递归
         if (cur == nullptr && child == nullptr) return true;
