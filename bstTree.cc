@@ -260,7 +260,37 @@ public:
         return nullptr;
     }
 
+    void mirror01() {       //将二叉树镜像反转
+         mirror01(root_);
+    }
+
+    bool mirror02() {       //判断二叉树的镜像对称
+        if(root_ == nullptr) return ;
+        return mirror02(root_->left_ , root_->right_);
+    }
+
 private:
+    bool mirror02(Node* node1 , Node* node2) {
+        if(node1 == nullptr && node2 == nullptr) {
+            return true;
+        }
+        if (node1 == nullptr || node2 == nullptr) {
+            return false;
+        }
+        if(node1->data_ != node2->data_) {
+            return false;
+        }
+        return mirror02(node1->left_ , node1->right_) && mirror02(node2->left_ , node2->right_);
+    }
+
+    void mirror01(Node* node) {
+        if(node == nullptr) return;
+        Node* tem = node->left_;        //交换子树
+        node->left_ = node->right_;
+        node->right_ = tem;
+        mirror01(node->left_);
+        mirror01(node->right_);
+    }
 
     bool isChildTree(Node *cur, Node *child) {          //判断子树递归
         if (cur == nullptr && child == nullptr) return true;
@@ -428,8 +458,6 @@ int main() {
 
     bsTree.inOrder();
     std::vector<int> vi;
-    bsTree.findValues(vi, 10, 60);
-    for (auto &i: vi) {
-        std::cout << i << " ";
-    }
+    bsTree.mirror01();
+    bsTree.inOrder();
 };
