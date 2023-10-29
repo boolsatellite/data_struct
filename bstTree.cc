@@ -265,11 +265,24 @@ public:
     }
 
     bool mirror02() {       //判断二叉树的镜像对称
-        if(root_ == nullptr) return ;
+        if(root_ == nullptr) return true;
         return mirror02(root_->left_ , root_->right_);
     }
 
+    Node* rebuild(int pre[] , int i , int j , int in[] , int m , int n) {   //根据前序中序重建bst树
+        if(i > j || m > n) return nullptr;
+        //创建当前子树根节点
+        Node* node = new Node(pre[i]);
+        for(int k=m ; k <= n ; k++) {
+            if(pre[i] == in[k]) {
+                node->left_ = rebuild(pre , i+1 , i+k-m , in , m , k -1 );
+                node->right_ = rebuild(pre , i+k-m+1 , j , in , k+1 , n);
+            }
+        }
+    }
+
 private:
+
     bool mirror02(Node* node1 , Node* node2) {
         if(node1 == nullptr && node2 == nullptr) {
             return true;
