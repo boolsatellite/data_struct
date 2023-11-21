@@ -1,8 +1,9 @@
 #include "iostream"
 #include "stack"
 #include <assert.h>
+#include <cmath>
 #include "vector"
-
+#include "map"
 /*
  * BST插入节点：
  * BST为空 - 插入节点为root节点
@@ -281,7 +282,36 @@ public:
         }
     }
 
+    bool isBalance() {                                          //判断二叉树是否为平衡树
+        bool flag;
+        isBalance1(root_ , 0 , flag);
+        return flag;
+        //return isBalance(root_);
+    }
+
 private:
+
+    int isBalance1(Node* node , int level , bool &flag) {       //返回节点高度，level形参用于记录当前节点高度值，flag用于记录是否平衡
+        if (node == nullptr) return level;
+        int left = isBalance1(node->left_ , level + 1 , flag);
+        int right = isBalance1(node->right_ , level + 1 , flag);
+        if (abs(left - right > 1)) flag = false;                //节点失衡
+        return [=](int l , int r){
+            if(l >= r) return l;
+            else return r;
+        };
+    }
+
+    bool isBalance(Node* node) {
+        if(node == nullptr) return true;
+        if(!isBalance(node->left_)) return false;
+        if(!isBalance(node->right_)) return false;
+
+        int left = high(node->left_);
+        int right = high(node->right_);
+
+        return abs(left - right) <= 1;
+    }
 
     bool mirror02(Node* node1 , Node* node2) {
         if(node1 == nullptr && node2 == nullptr) {
@@ -461,6 +491,7 @@ private:
     Compare comp_;
 };
 
+
 int main() {
 
     int arr[] = {58, 24, 67, 0, 34, 62, 69, 5, 41, 64, 78};
@@ -473,4 +504,6 @@ int main() {
     std::vector<int> vi;
     bsTree.mirror01();
     bsTree.inOrder();
+
+    std::map<int , std::string> map{};
 };
