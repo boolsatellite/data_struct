@@ -289,7 +289,31 @@ public:
         //return isBalance(root_);
     }
 
+    Node* getVal(int k) {                                         //求中序倒数第k个节点
+        int i = 1;              //用于计数
+        Node* node = getVal(root_ , k , std::move(i));
+        if(node == nullptr) {
+            throw "error k";
+        }
+        else return node;
+    }
+
 private:
+
+    Node* getVal(Node *node, int k , int&& i) {
+        if (node == nullptr)
+            return nullptr;
+
+        Node* left = getVal(node->right_, k , std::move(i)); // R
+        if (left != nullptr)
+            return left;
+        // V
+        if (i++ == k) // 在VRL的顺序下，找到正数第k个元素
+        {
+            return node;
+        }
+        return getVal(node->left_, k , std::move(i)); // L
+    }
 
     int isBalance1(Node* node , int level , bool &flag) {       //返回节点高度，level形参用于记录当前节点高度值，flag用于记录是否平衡
         if (node == nullptr) return level;
@@ -502,6 +526,9 @@ int main() {
 
     bsTree.inOrder();
     std::vector<int> vi;
+
+    std::cout << bsTree.getVal(3)->data_ << std::endl;
+
     bsTree.mirror01();
     bsTree.inOrder();
 
