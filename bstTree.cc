@@ -1,7 +1,9 @@
 #include "iostream"
 #include "stack"
+#include <queue>
 #include <assert.h>
 #include <cmath>
+#include <typeinfo>
 #include "vector"
 #include "map"
 /*
@@ -16,9 +18,29 @@
 
 template<typename T, typename Compare = std::less<T>>
 class BSTree {
-struct Node;
+    struct Node;
 public:
+
     BSTree() : root_(nullptr) {}
+
+    ~BSTree() {                 //层序遍历释放bstTree
+        if (root_ != nullptr) {
+            std::queue<Node *> s;
+            s.push(root_);
+            while (!s.empty()) {
+                Node *front = s.front();
+                s.pop();
+
+                if (front->left_ != nullptr) {
+                    s.push(front->left_);
+                }
+                if (front->right_!= nullptr) {
+                    s.push(front->right_);
+                }
+                ::delete front;
+            }
+        }
+    }
 
     //非递归插入操作
     void n_insert(const T &val) {
@@ -247,12 +269,12 @@ public:
         }
     }
 
-    Node* getLCA(T a , T b) {                 //最近公共祖先节点
-        Node* cur = root_;
-        while(cur != nullptr) {
-            if(a < cur->data_ && b < cur->data_) {
+    Node *getLCA(T a, T b) {                 //最近公共祖先节点
+        Node *cur = root_;
+        while (cur != nullptr) {
+            if (a < cur->data_ && b < cur->data_) {
                 cur = cur->left_;
-            } else if ( a > cur->data_ && b > cur->data_) {
+            } else if (a > cur->data_ && b > cur->data_) {
                 cur = cur->right_;
             } else {
                 return cur;
@@ -262,49 +284,48 @@ public:
     }
 
     void mirror01() {       //将二叉树镜像反转
-         mirror01(root_);
+        mirror01(root_);
     }
 
     bool mirror02() {       //判断二叉树的镜像对称
-        if(root_ == nullptr) return true;
-        return mirror02(root_->left_ , root_->right_);
+        if (root_ == nullptr) return true;
+        return mirror02(root_->left_, root_->right_);
     }
 
-    Node* rebuild(int pre[] , int i , int j , int in[] , int m , int n) {   //根据前序中序重建bst树
-        if(i > j || m > n) return nullptr;
+    Node *rebuild(int pre[], int i, int j, int in[], int m, int n) {   //根据前序中序重建bst树
+        if (i > j || m > n) return nullptr;
         //创建当前子树根节点
-        Node* node = new Node(pre[i]);
-        for(int k=m ; k <= n ; k++) {
-            if(pre[i] == in[k]) {
-                node->left_ = rebuild(pre , i+1 , i+k-m , in , m , k -1 );
-                node->right_ = rebuild(pre , i+k-m+1 , j , in , k+1 , n);
+        Node *node = new Node(pre[i]);
+        for (int k = m; k <= n; k++) {
+            if (pre[i] == in[k]) {
+                node->left_ = rebuild(pre, i + 1, i + k - m, in, m, k - 1);
+                node->right_ = rebuild(pre, i + k - m + 1, j, in, k + 1, n);
             }
         }
     }
 
     bool isBalance() {                                          //判断二叉树是否为平衡树
         bool flag;
-        isBalance1(root_ , 0 , flag);
+        isBalance1(root_, 0, flag);
         return flag;
         //return isBalance(root_);
     }
 
-    Node* getVal(int k) {                                         //求中序倒数第k个节点
+    Node *getVal(int k) {                                         //求中序倒数第k个节点
         int i = 1;              //用于计数
-        Node* node = getVal(root_ , k , std::move(i));
-        if(node == nullptr) {
+        Node *node = getVal(root_, k, std::move(i));
+        if (node == nullptr) {
             throw "error k";
-        }
-        else return node;
+        } else return node;
     }
 
 private:
 
-    Node* getVal(Node *node, int k , int&& i) {
+    Node *getVal(Node *node, int k, int &&i) {
         if (node == nullptr)
             return nullptr;
 
-        Node* left = getVal(node->right_, k , std::move(i)); // R
+        Node *left = getVal(node->right_, k, std::move(i)); // R
         if (left != nullptr)
             return left;
         // V
@@ -312,24 +333,24 @@ private:
         {
             return node;
         }
-        return getVal(node->left_, k , std::move(i)); // L
+        return getVal(node->left_, k, std::move(i)); // L
     }
 
-    int isBalance1(Node* node , int level , bool &flag) {       //返回节点高度，level形参用于记录当前节点高度值，flag用于记录是否平衡
+    int isBalance1(Node *node, int level, bool &flag) {       //返回节点高度，level形参用于记录当前节点高度值，flag用于记录是否平衡
         if (node == nullptr) return level;
-        int left = isBalance1(node->left_ , level + 1 , flag);
-        int right = isBalance1(node->right_ , level + 1 , flag);
+        int left = isBalance1(node->left_, level + 1, flag);
+        int right = isBalance1(node->right_, level + 1, flag);
         if (abs(left - right > 1)) flag = false;                //节点失衡
-        return [=](int l , int r){
-            if(l >= r) return l;
+        return [=](int l, int r) {
+            if (l >= r) return l;
             else return r;
         };
     }
 
-    bool isBalance(Node* node) {
-        if(node == nullptr) return true;
-        if(!isBalance(node->left_)) return false;
-        if(!isBalance(node->right_)) return false;
+    bool isBalance(Node *node) {
+        if (node == nullptr) return true;
+        if (!isBalance(node->left_)) return false;
+        if (!isBalance(node->right_)) return false;
 
         int left = high(node->left_);
         int right = high(node->right_);
@@ -337,22 +358,22 @@ private:
         return abs(left - right) <= 1;
     }
 
-    bool mirror02(Node* node1 , Node* node2) {
-        if(node1 == nullptr && node2 == nullptr) {
+    bool mirror02(Node *node1, Node *node2) {
+        if (node1 == nullptr && node2 == nullptr) {
             return true;
         }
         if (node1 == nullptr || node2 == nullptr) {
             return false;
         }
-        if(node1->data_ != node2->data_) {
+        if (node1->data_ != node2->data_) {
             return false;
         }
-        return mirror02(node1->left_ , node1->right_) && mirror02(node2->left_ , node2->right_);
+        return mirror02(node1->left_, node1->right_) && mirror02(node2->left_, node2->right_);
     }
 
-    void mirror01(Node* node) {
-        if(node == nullptr) return;
-        Node* tem = node->left_;        //交换子树
+    void mirror01(Node *node) {
+        if (node == nullptr) return;
+        Node *tem = node->left_;        //交换子树
         node->left_ = node->right_;
         node->right_ = tem;
         mirror01(node->left_);
@@ -364,9 +385,9 @@ private:
         if (cur == nullptr) return false;
         if (child == nullptr) return true;
 
-        if(cur->data_ != child->data_) return false;
+        if (cur->data_ != child->data_) return false;
 
-        return isChildTree(cur->left_ , child->right_) && isChildTree(cur->right_ , child->right_);
+        return isChildTree(cur->left_, child->right_) && isChildTree(cur->right_, child->right_);
     }
 
     bool isBSTree(Node *node, Node *&pre) {
@@ -518,6 +539,7 @@ private:
 
 int main() {
 
+/*
     int arr[] = {58, 24, 67, 0, 34, 62, 69, 5, 41, 64, 78};
     BSTree<int> bsTree;
     for (int &i: arr) {
@@ -533,4 +555,10 @@ int main() {
     bsTree.inOrder();
 
     std::map<int , std::string> map{};
+*/
+
+    int arr[10][5];
+
+    std::cout << typeid(arr).name() << std::endl;
+    std::cout << typeid(+arr).name() << std::endl;
 };
