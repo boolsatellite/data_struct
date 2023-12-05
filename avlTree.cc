@@ -15,6 +15,10 @@ public:
         root_ = insert(root_, val);     //由于旋转会导致root_可能变化,故每次插入都要更新
     }
 
+    void remove(int val) {
+        root_ = remove(root_, val);
+    }
+
 
 private:
     struct Node {
@@ -26,6 +30,60 @@ private:
         struct Node *right_;
         int hight_;
     };
+
+    Node *remove(Node *node, const int &val) {
+        if (node == nullptr) {
+            return nullptr;
+        }
+        if (node->data_ > val) {
+            node->left_ = remove(node->left_, val);
+            //失衡调整
+            if(hight(node->right_) - hight(node->left_) > 1) {
+                if(hight(node->right_->right_) - hight(node->right_->left_)) {
+                    node = leftRotate(node);
+                } else {
+                    node = rightBlance(node);
+                }
+            }
+        } else if (node->data_ < val) {
+            node->right_ = remove(node->right_, val);
+            if(hight(node->left_) - hight(node->right_) > 1) {
+                if(hight(node->left_->left_) - hight(node->left_->right_)) {
+                    node = rightRotate(node);
+                } else {
+                    node = leftBlance(node);
+                }
+            }
+        } else {    //node->data == val
+            if(node->left_ != nullptr && node->right_ != nullptr) {     //先处理两个孩子的情况,为了避免节点失衡，删除节点高的子树
+                if (hight(node->left_) >= hight(node->right_)) {        //左子树高删除前驱
+                    Node *pre = node->left_;
+                    while (pre->right_) {
+                        pre = pre->right_;
+                    }
+                    node->data_ = pre->data_;
+                    node->left_ = remove(node->left_, pre->data_);
+
+                } else {                                                //右子树高删除后继
+                    Node *post = node->right_;
+                    while (post->left_) {
+                        post = post->left_;
+                    }
+                    node->data_ = post->data_;
+                    node->right_ = remove(node->right_, post->data_);
+                }
+            } else {                                                    //只有一个节点不为空或全为空
+                Node* child = node->left_;
+                if(child == nullptr) {
+                    child = node->right_;
+                }
+                delete node;
+                return child;
+            }
+        }
+        node->hight_ = std::max(hight(node->left_) , hight(node->right_)) + 1;
+        return node;
+    }
 
     Node *insert(Node *node, const int &val) {
         if (node == nullptr) {      // 递归结束，找到插入的位置了
@@ -131,4 +189,7 @@ int main() {
     for (auto i: arr) {
         avlTree.insert(i);
     }
+
+    avlTree.remove(4);
+
 }
