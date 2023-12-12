@@ -30,6 +30,86 @@ private:
     struct Node;
     Node* root_;
 
+    void fixAfterInsert(Node *pNode) {
+        while(Color(parent(pNode)) == Color::RED) {     //当前红色节点的父节点为红色开始调整，由于新插入节点为红色，故使用while
+            if(left(parent(parent(pNode))) == parent(pNode)) {      //插入节点位于爷爷节点的左子树
+                Node* uncle = right(parent(parent(pNode)));
+                if(Color(uncle) == Color::RED) {                    //叔叔节点为红色
+                    setColor(parent(pNode) , Color::BLACK);
+                    setColor(parent(parent(pNode)) , Color::RED);
+                    setColor(left(parent(parent(pNode))) , Color::BLACK);
+                    pNode = parent(parent(pNode));                  //讲pNode指向爷爷节点，重新判断
+                    continue;
+                } else {
+                    if(right(parent(pNode)) == pNode) {
+                        leftRotate(parent(pNode));
+                    }
+                    pNode = pNode->left_;
+
+                    setColor(parent(pNode) , Color::BLACK);
+                    setColor(parent(parent(pNode)) , Color::RED);
+                    rightRotate(parent(parent(pNode)));
+                    break;
+                }
+            } else {                                                //插入节点位于爷爷节点的左子树
+                Node* uncle = left(parent(parent(pNode)));
+                if(Color(uncle) == Color::RED) {                    //叔叔节点为红色
+                    setColor(parent(pNode) , Color::BLACK);
+                    setColor(parent(parent(pNode)) , Color::RED);
+                    setColor(left(parent(parent(pNode))) , Color::BLACK);
+                    pNode = parent(parent(pNode));                  //讲pNode指向爷爷节点，重新判断
+                    continue;
+                } else {
+                    if(left(parent(pNode)) == pNode) {
+                        rightRotate(parent(pNode));
+                    }
+                    pNode = pNode->left_;
+
+                    setColor(parent(pNode) , Color::BLACK);
+                    setColor(parent(parent(pNode)) , Color::RED);
+                    leftRotate(parent(parent(pNode)));
+                    break;
+                }
+
+            }
+        }
+        setColor(root_ , Color::BLACK);                             //防止向上调整时将root_置为红色
+    }
+
+    void insert(int val) {
+        if(root_ == nullptr) {
+            root_ = new Node(val);
+            return;
+        }
+
+        Node* parent = nullptr;
+        Node* cur = root_;
+        while(cur != nullptr) {
+            if(cur->data_ > val) {
+                parent = cur;
+                cur = cur->left_;
+            } else if(cur->data_ < val) {
+                parent = cur;
+                cur = cur->right_;
+            } else {
+                return;
+            }
+        }
+
+        Node* node = new Node(val , parent, nullptr , nullptr , Color::RED);    //生成父节点为parent的红色节点
+        if(parent->data_ > val)
+            parent->left_ = node;
+        else parent->right_ = node;
+
+        if(Color(parent) == Color::RED) {                                      //当父节点的颜色为红色，需要调整
+            fixAfterInsert(node);
+        }
+
+
+
+    }
+
+
     void leftRotate(Node* node) {                   //左旋转
         Node* child = node->right_;
         child->parent_ = node->parent_;
@@ -67,7 +147,6 @@ private:
              }
              child->right_ = node;
              node->parent_ = child;
-
          }
     }
 
