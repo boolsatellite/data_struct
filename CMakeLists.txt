@@ -12,3 +12,5 @@ foreach(source ${SRC_LIST})
     message(STATUS ${target})
     add_executable(${target} ${source})
 endforeach()
+
+add_subdirectory(leetcode)
