@@ -25,8 +25,18 @@ uint64_t fabonacci(int n) {                  //n：斐波那契数列中的第�
     }
 }
 
-int main() {
+int main1() {
     int n = 200;
-    dp = new uint64_t [n]();
+    dp = new uint64_t [n+1]();
     std::cout << fabonacci(n);
+}
+
+int main() {
+    int n = 20;
+    dp = new uint64_t[n + 1]();
+    dp[1] = dp[2] = 1;
+    for(int i=3 ; i<=n ; ++i) {
+        dp[i] = dp[i-1] + dp[i-2];
+    }
+    return dp[n];
 }
