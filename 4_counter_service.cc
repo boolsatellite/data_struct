@@ -47,7 +47,7 @@ int main() {
         }
         if(j == m) {                                //放在0号柜台速度更快
             x[0]++;
-            mintime = mintime + cons[0].time;
+            mintime = cons[0].time * x[0];
         }
     }
 
