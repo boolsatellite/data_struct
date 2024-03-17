@@ -8,12 +8,17 @@
 
 class Solution {
 public:
-    int removeElement(std::vector<int>& nums, int val) {
-        std::vector<int>::iterator it = std::remove(nums.begin(), nums.end(),val);
-        return nums.size();
-        /*
-        nums.erase(it , nums.end());
-        return nums.size();
-         */
+    int removeElement(std::vector<int> &nums, int val) {
+        int right = nums.size();
+        int left = 0;
+
+        while (left <= right) {           // todo
+            if(nums[left] == val) {
+                nums[left] = nums[right--];
+            } else {
+                left++;
+            }
+        }
+        return left;
     }
 };
