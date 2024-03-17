@@ -12,7 +12,7 @@ public:
         int right = nums.size();
         int left = 0;
 
-        while (left <= right) {           // todo
+        while (left <= right) {
             if(nums[left] == val) {
                 nums[left] = nums[right--];
             } else {
