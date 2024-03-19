@@ -2,6 +2,10 @@
 // Created by bools on 19/03/2024.
 //
 
+#include "string"
+#include "vector"
+using namespace std;
+
 
 string MAPPING[10] = {"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
 
