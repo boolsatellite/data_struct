@@ -9,20 +9,12 @@ int uniquePathsWithObstacles(vector<vector<int>> &obstacleGrid) {
 
     std::vector<std::vector<int>> dp(m,std::vector<int>(n));
     // init
-    for(int i=0 ; i<m ; ++i) {
-        if(obstacleGrid[i][0] == 0) {
-            dp[i][0] = 1;
-        } else {
-            break;
-        }
+    for(int i=0 ; i<m && obstacleGrid[i][0] == 0; ++i) {
+        dp[i][0] = 1;
     } 
 
-    for(int i=0 ; i<n ; ++i) {
-        if(obstacleGrid[0][i] == 0) {
-            dp[0][i] = 1;
-        } else {
-            break;
-        }
+    for(int i=0 && obstacleGrid[0][i] == 0; i<n ; ++i) {
+        dp[0][i] = 1;
     }
 
     // dp[i][i] = dp[i-1][j] + dp[i][j-1]
