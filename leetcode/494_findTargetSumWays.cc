@@ -9,7 +9,7 @@ int findTargetSumWays(std::vector<int> &nums, int target) {   // 装满背包有
    */
   int sum = 0;
   for (auto i : nums) sum += i;
-  if(std::abs(target) > sum)
+  if(std::abs(target) > sum) return 0;
   if((target + sum) % 2 == 1) return 0; 
   int left = (target + sum) / 2;
 
