@@ -1,3 +1,6 @@
+#include <vector>
+using std::vector;
+
 struct TreeNode {
   int val;
   TreeNode *left;
