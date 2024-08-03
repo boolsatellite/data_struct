@@ -1,6 +1,7 @@
 
 aux_source_directory(. code)
 
+set(CMAKE_CXX_STANDARD 17)
 foreach(source ${code})
     set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
     message(STATUS ${source}====)
